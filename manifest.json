@@ -1,0 +1,18 @@
+{
+  "name": "Bombero Navarra 2026 · Fichas y Simulacros",
+  "short_name": "Bombero Navarra",
+  "description": "1.348 fichas, selección Ultra 546 y simulacros.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f8",
+  "theme_color": "#991b1b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
