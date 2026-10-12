@@ -182,6 +182,30 @@ function exportProgress(){let blob=new Blob([JSON.stringify({version:2,exported:
 function importProgress(file){if(!file)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);app=d.app||d;if(!app.cards)app.cards={};if(!app.examHistory)app.examHistory=[];save();alert('Progreso importado.');showView('home')}catch(e){alert('Archivo no válido.')}};r.readAsText(file)}
 let installPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;document.getElementById('installBtn').classList.remove('hide')});document.getElementById('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;document.getElementById('installBtn').classList.add('hide')}};
 
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}buildDeckSelect();renderHome();
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('./sw.js', { updateViaCache: 'none' })
+    .then(registration => {
+      function notifyUpdate() {
+        if (registration.waiting) {
+          console.info(
+            'Actualización disponible: cierra todas las pestañas ' +
+            'de la aplicación y vuelve a abrirla.'
+          );
+        }
+      }
+      notifyUpdate();
+      registration.addEventListener('updatefound', () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener('statechange', notifyUpdate);
+      });
+    })
+    .catch(error => {
+      console.error('No se pudo activar el modo offline:', error);
+    });
+}
+
+buildDeckSelect();renderHome();
 </script>
 </body></html>
